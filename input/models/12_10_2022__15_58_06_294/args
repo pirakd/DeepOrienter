@@ -1,0 +1,57 @@
+{
+    "data": {
+        "n_experiments": 1,
+        "max_set_size": 500,
+        "network_filename": "H_sapiens.net",
+        "directed_interactions_filename": [
+            "KPI"
+        ],
+        "sources_filename": "mutations_AML",
+        "terminals_filename": "gene_expression_AML",
+        "load_prop_scores": true,
+        "save_prop_scores": false,
+        "balance_dataset": true,
+        "prop_scores_filename": "AML_KPI_1",
+        "random_seed": 0,
+        "normalization_method": "power",
+        "split_type": "normal"
+    },
+    "propagation": {
+        "alpha": 0.8,
+        "eps": 1e-06,
+        "n_iterations": 200
+    },
+    "model": {
+        "feature_extractor_layers": [
+            64,
+            32
+        ],
+        "classifier_layers": [
+            64,
+            32
+        ],
+        "pulling_func": "mean",
+        "exp_emb_size": 4,
+        "feature_extractor_dropout": 0,
+        "classifier_dropout": 0,
+        "pair_degree_feature": 0,
+        "share_source_terminal_weights": false
+    },
+    "train": {
+        "intermediate_loss_weight": 0,
+        "intermediate_loss_type": "BCE",
+        "focal_gamma": 1,
+        "train_val_test_split": [
+            0.8,
+            0.2,
+            0
+        ],
+        "train_batch_size": 32,
+        "test_batch_size": 32,
+        "n_epochs": 100,
+        "eval_interval": 3,
+        "learning_rate": 0.001,
+        "max_evals_no_imp": 3,
+        "optimizer": "ADAM"
+    }
+}
