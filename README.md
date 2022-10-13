@@ -24,5 +24,5 @@ pip install path/to/project/requirements.txt
 ### Citation 
 
 
-## License
+### License
 DeepOrienter is MIT licensed, as found in the [LICENSE](LICENSE) file.
