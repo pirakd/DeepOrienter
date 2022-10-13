@@ -7,8 +7,8 @@ import copy
 from tqdm import tqdm
 
 class Trainer():
-    def __init__(self, n_epochs, criteria, optimizer, eval_metric,  eval_interval=1,  device='cpu', verbose=3, early_stop=None):
-        self.n_epochs = n_epochs
+    def __init__(self, max_num_epochs, criteria, optimizer, eval_metric,  eval_interval=1,  device='cpu', verbose=3, early_stop=None):
+        self.max_num_epochs = max_num_epochs
         self.criteria = criteria
         self.optimizer = optimizer
         self.eval_metric = eval_metric
@@ -29,9 +29,9 @@ class Trainer():
 
 
 class ClassifierTrainer(Trainer):
-    def __init__(self, n_epochs, criteria, intermediate_criteria, intermediate_loss_weight,  optimizer,
+    def __init__(self, max_num_epochs, criteria, intermediate_criteria, intermediate_loss_weight,  optimizer,
                  eval_metric, eval_interval, device, verbose=3, early_stop=None):
-        super().__init__(n_epochs, criteria, optimizer, eval_metric, eval_interval, device, verbose, early_stop)
+        super().__init__(max_num_epochs, criteria, optimizer, eval_metric, eval_interval, device, verbose, early_stop)
         self.intermediate_criteria = intermediate_criteria
         if intermediate_loss_weight:
             self.intermediate_loss_weight = torch.tensor(intermediate_loss_weight, requires_grad=False).to(self.device)
@@ -48,7 +48,7 @@ class ClassifierTrainer(Trainer):
         no_improvement_counter = 0
         n_samples_per_epoch = len(train_loader.dataset)
 
-        for epoch in range(self.n_epochs):
+        for epoch in range(self.max_num_epochs):
             epoch_loss, epoch_intermediate_loss, epoch_classifier_loss, epoch_hits =\
                 self.train_single_epoch(model,train_loader)
 
@@ -58,7 +58,7 @@ class ClassifierTrainer(Trainer):
                   .format(epoch, self.losses['train'][-1], epoch_classifier_loss/n_samples_per_epoch,
                           epoch_intermediate_loss/n_samples_per_epoch,  epoch_hits/n_samples_per_epoch))
 
-            if (np.mod(epoch, self.eval_interval) == 0 and epoch) or (epoch+1 == self.n_epochs):
+            if (np.mod(epoch, self.eval_interval) == 0 and epoch) or (epoch+1 == self.max_num_epochs):
                 avg_eval_loss, avg_eval_intermediate_loss, avg_eval_classifier_loss, eval_acc, eval_auc, _, _ = \
                     self.eval(model, eval_loader)
 
@@ -80,7 +80,7 @@ class ClassifierTrainer(Trainer):
                 if no_improvement_counter == max_evals_no_improvement:
                     print('early stopping on epoch {}, best epoch {}'.format(epoch, best_epoch))
                     break
-                if epoch + 1 == self.n_epochs:
+                if epoch + 1 == self.max_num_epochs:
                     print('reached maximum number of epochs, best epoch {}'.format(best_epoch))
 
         train_stats = {'best_val_loss':best_eval_loss, 'best_acc':best_acc, 'best_auc':best_auc,

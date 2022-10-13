@@ -34,7 +34,7 @@ example_preset = {
          'train_val_test_split': [0.66, 0.14, 0.2], # sum([train, val, test])=1
          'train_batch_size': 4,
          'test_batch_size': 32,
-         'n_epochs': 4,
+         'max_num_epochs': 1000,
          'eval_interval': 2,
          'learning_rate': 1e-3,
          'max_evals_no_imp': 3,
