@@ -93,7 +93,7 @@ def run(sys_args):
         optimizer = optimizer(filter(lambda p: p.requires_grad, model.parameters()), lr=args['train']['learning_rate'])
         intermediate_loss_type = get_loss_function(args['train']['intermediate_loss_type'],
                                                    focal_gamma=args['train']['focal_gamma'])
-        trainer = ClassifierTrainer(args['train']['n_epochs'], criteria=nn.CrossEntropyLoss(reduction='sum'), intermediate_criteria=intermediate_loss_type,
+        trainer = ClassifierTrainer(args['train']['max_num_epochs'], criteria=nn.CrossEntropyLoss(reduction='sum'), intermediate_criteria=intermediate_loss_type,
                                     intermediate_loss_weight=args['train']['intermediate_loss_weight'],
                                     optimizer=optimizer, eval_metric=None, eval_interval=args['train']['eval_interval'], device=device)
         # train
@@ -126,7 +126,6 @@ if __name__ == '__main__':
     n_exp = 5
     split = [0.8, 0.2, 0]
     interaction_type = sorted(['KPI'])
-    # interaction_type = sorted(['KEGG'])
     device = None
     prop_scores_filename = input_type + '_' + '_'.join(interaction_type) + '_{}'.format(n_exp)
 
@@ -146,8 +145,8 @@ if __name__ == '__main__':
     parser.add_argument('-w', dest='n_workers', type=int,
                         help='number of dataloader workers', default=0)
     args = parser.parse_args()
-    args.prop_scores_filename = args.experiments_type + '_' + '_'.join(args.directed_interactions_filename) + '_{}'.format(args.n_experiments)
-    # args.load_prop_scores = True
-    args.save_prop_scores = True
+    # args.prop_scores_filename = args.experiments_type + '_' + '_'.join(args.directed_interactions_filename) + '_{}'.format(args.n_experiments)
+    args.load_prop_scores = True
+    # args.save_prop_scores = True
     run(args)
 

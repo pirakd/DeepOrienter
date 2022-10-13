@@ -1,6 +1,6 @@
 {
     "data": {
-        "n_experiments": 1,
+        "n_experiments": 5,
         "max_set_size": 500,
         "network_filename": "H_sapiens.net",
         "directed_interactions_filename": [
@@ -11,7 +11,7 @@
         "load_prop_scores": true,
         "save_prop_scores": false,
         "balance_dataset": true,
-        "prop_scores_filename": "AML_KPI_1",
+        "prop_scores_filename": "AML_KPI_5",
         "random_seed": 0,
         "normalization_method": "power",
         "split_type": "normal"
@@ -23,22 +23,21 @@
     },
     "model": {
         "feature_extractor_layers": [
-            64,
-            32
+            128,
+            64
         ],
         "classifier_layers": [
-            64,
-            32
+            64
         ],
         "pulling_func": "mean",
-        "exp_emb_size": 4,
+        "exp_emb_size": 16,
         "feature_extractor_dropout": 0,
         "classifier_dropout": 0,
         "pair_degree_feature": 0,
         "share_source_terminal_weights": false
     },
     "train": {
-        "intermediate_loss_weight": 0,
+        "intermediate_loss_weight": 0.5,
         "intermediate_loss_type": "BCE",
         "focal_gamma": 1,
         "train_val_test_split": [
@@ -46,10 +45,10 @@
             0.2,
             0
         ],
-        "train_batch_size": 32,
+        "train_batch_size": 4,
         "test_batch_size": 32,
-        "n_epochs": 100,
-        "eval_interval": 3,
+        "max_num_epochs": 1000,
+        "eval_interval": 2,
         "learning_rate": 0.001,
         "max_evals_no_imp": 3,
         "optimizer": "ADAM"

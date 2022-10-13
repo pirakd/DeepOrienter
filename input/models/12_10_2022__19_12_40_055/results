@@ -1,0 +1,22 @@
+{
+    "train_stats": {
+        "best_val_loss": 0.5745960331133738,
+        "best_acc": 0.761180679785331,
+        "best_auc": 0.8027724589864897,
+        "best_epoch": 34
+    },
+    "test_stats": {},
+    "n_experiments": 5,
+    "normalization_constants_dicts": {
+        "samples": {
+            "lmbda": -7015.3149493058345,
+            "mean": 4.601574047887921e-05,
+            "std": 3.474101157957947e-05
+        },
+        "degrees": {
+            "lmbda": 0.15851508569587422,
+            "mean": 0.15851508569587422,
+            "std": 2.3633295895328144
+        }
+    }
+}

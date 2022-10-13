@@ -101,7 +101,7 @@ if __name__ == '__main__':
     n_exp = 5
     split = [0.66, 0.14, 0.2]
     interaction_type = ['KPI']
-    prop_scores_filename = 'AML_KPI_5'
+    prop_scores_filename = None
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-ex', '--ex_type', dest='experiments_type', type=str,
@@ -116,13 +116,9 @@ if __name__ == '__main__':
                         default=split, type=float)
     parser.add_argument('-in', '--inter_file', dest='directed_interactions_filename', nargs='*', type=str,
                         help='KPI/STKE', default=interaction_type)
-    parser.add_argument('-p', '--prop_file', dest='prop_scores_filename', type=str,
-                        help='Name of prop score file(save/load)', default=prop_scores_filename)
     parser.add_argument('-w', dest='n_workers', type=int,
                         help='number of dataloader workers', default=0)
     parser.add_argument('-d', dest='device', type=int, help='gpu number', default=None)
     args = parser.parse_args()
-    args.directed_interactions_filename = sorted(args.directed_interactions_filename)
-    args.prop_scores_filename = args.experiments_type + '_' + '_'.join(args.directed_interactions_filename) + '_{}'.format(args.n_experiments)
 
     run(args)

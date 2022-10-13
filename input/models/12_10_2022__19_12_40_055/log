@@ -1,0 +1,119 @@
+{
+    "data": {
+        "n_experiments": 5,
+        "max_set_size": 500,
+        "network_filename": "H_sapiens.net",
+        "directed_interactions_filename": [
+            "KPI"
+        ],
+        "sources_filename": "mutations_AML",
+        "terminals_filename": "gene_expression_AML",
+        "load_prop_scores": true,
+        "save_prop_scores": false,
+        "balance_dataset": true,
+        "prop_scores_filename": "AML_KPI_5",
+        "random_seed": 0,
+        "normalization_method": "power",
+        "split_type": "normal"
+    },
+    "propagation": {
+        "alpha": 0.8,
+        "eps": 1e-06,
+        "n_iterations": 200
+    },
+    "model": {
+        "feature_extractor_layers": [
+            128,
+            64
+        ],
+        "classifier_layers": [
+            64
+        ],
+        "pulling_func": "mean",
+        "exp_emb_size": 16,
+        "feature_extractor_dropout": 0,
+        "classifier_dropout": 0,
+        "pair_degree_feature": 0,
+        "share_source_terminal_weights": false
+    },
+    "train": {
+        "intermediate_loss_weight": 0.5,
+        "intermediate_loss_type": "BCE",
+        "focal_gamma": 1,
+        "train_val_test_split": [
+            0.8,
+            0.2,
+            0
+        ],
+        "train_batch_size": 4,
+        "test_batch_size": 32,
+        "max_num_epochs": 1000,
+        "eval_interval": 2,
+        "learning_rate": 0.001,
+        "max_evals_no_imp": 3,
+        "optimizer": "ADAM"
+    }
+}
+Training model 0
+epoch 0, train_loss: 6.73e-01, classifier_loss: 6.71e-01, intermediate_loss:6.74e-01 train_acc:0.57
+epoch 1, train_loss: 6.58e-01, classifier_loss: 6.56e-01, intermediate_loss:6.61e-01 train_acc:0.59
+epoch 2, train_loss: 6.41e-01, classifier_loss: 6.39e-01, intermediate_loss:6.44e-01 train_acc:0.62
+epoch 2, validation loss:6.29e-01, validation classifier loss: 6.25e-01, validation intermediate loss: 6.33e-01, validation acc: 0.69, validation auc: 0.726
+epoch 3, train_loss: 6.31e-01, classifier_loss: 6.29e-01, intermediate_loss:6.34e-01 train_acc:0.63
+epoch 4, train_loss: 6.23e-01, classifier_loss: 6.21e-01, intermediate_loss:6.25e-01 train_acc:0.63
+epoch 4, validation loss:6.19e-01, validation classifier loss: 6.14e-01, validation intermediate loss: 6.24e-01, validation acc: 0.62, validation auc: 0.714
+epoch 5, train_loss: 6.17e-01, classifier_loss: 6.15e-01, intermediate_loss:6.20e-01 train_acc:0.65
+epoch 6, train_loss: 6.19e-01, classifier_loss: 6.16e-01, intermediate_loss:6.22e-01 train_acc:0.65
+epoch 6, validation loss:6.19e-01, validation classifier loss: 6.16e-01, validation intermediate loss: 6.22e-01, validation acc: 0.65, validation auc: 0.716
+epoch 7, train_loss: 6.16e-01, classifier_loss: 6.13e-01, intermediate_loss:6.19e-01 train_acc:0.66
+epoch 8, train_loss: 6.10e-01, classifier_loss: 6.06e-01, intermediate_loss:6.15e-01 train_acc:0.67
+epoch 8, validation loss:6.09e-01, validation classifier loss: 6.07e-01, validation intermediate loss: 6.11e-01, validation acc: 0.68, validation auc: 0.742
+epoch 9, train_loss: 6.08e-01, classifier_loss: 6.04e-01, intermediate_loss:6.13e-01 train_acc:0.67
+epoch 10, train_loss: 6.08e-01, classifier_loss: 6.02e-01, intermediate_loss:6.14e-01 train_acc:0.67
+epoch 10, validation loss:6.30e-01, validation classifier loss: 6.26e-01, validation intermediate loss: 6.33e-01, validation acc: 0.66, validation auc: 0.708
+epoch 11, train_loss: 6.07e-01, classifier_loss: 6.00e-01, intermediate_loss:6.13e-01 train_acc:0.67
+epoch 12, train_loss: 6.03e-01, classifier_loss: 5.96e-01, intermediate_loss:6.10e-01 train_acc:0.68
+epoch 12, validation loss:6.08e-01, validation classifier loss: 6.03e-01, validation intermediate loss: 6.13e-01, validation acc: 0.69, validation auc: 0.746
+epoch 13, train_loss: 6.01e-01, classifier_loss: 5.94e-01, intermediate_loss:6.09e-01 train_acc:0.68
+epoch 14, train_loss: 6.03e-01, classifier_loss: 5.94e-01, intermediate_loss:6.11e-01 train_acc:0.68
+epoch 14, validation loss:5.96e-01, validation classifier loss: 5.85e-01, validation intermediate loss: 6.06e-01, validation acc: 0.70, validation auc: 0.754
+epoch 15, train_loss: 5.96e-01, classifier_loss: 5.86e-01, intermediate_loss:6.06e-01 train_acc:0.69
+epoch 16, train_loss: 5.99e-01, classifier_loss: 5.87e-01, intermediate_loss:6.11e-01 train_acc:0.69
+epoch 16, validation loss:5.97e-01, validation classifier loss: 5.85e-01, validation intermediate loss: 6.08e-01, validation acc: 0.71, validation auc: 0.760
+epoch 17, train_loss: 5.95e-01, classifier_loss: 5.81e-01, intermediate_loss:6.08e-01 train_acc:0.70
+epoch 18, train_loss: 5.92e-01, classifier_loss: 5.75e-01, intermediate_loss:6.10e-01 train_acc:0.70
+epoch 18, validation loss:5.90e-01, validation classifier loss: 5.76e-01, validation intermediate loss: 6.05e-01, validation acc: 0.72, validation auc: 0.773
+epoch 19, train_loss: 5.92e-01, classifier_loss: 5.72e-01, intermediate_loss:6.11e-01 train_acc:0.70
+epoch 20, train_loss: 5.89e-01, classifier_loss: 5.66e-01, intermediate_loss:6.13e-01 train_acc:0.71
+epoch 20, validation loss:5.89e-01, validation classifier loss: 5.68e-01, validation intermediate loss: 6.10e-01, validation acc: 0.72, validation auc: 0.777
+epoch 21, train_loss: 5.87e-01, classifier_loss: 5.59e-01, intermediate_loss:6.14e-01 train_acc:0.71
+epoch 22, train_loss: 5.82e-01, classifier_loss: 5.52e-01, intermediate_loss:6.13e-01 train_acc:0.73
+epoch 22, validation loss:6.08e-01, validation classifier loss: 5.73e-01, validation intermediate loss: 6.42e-01, validation acc: 0.71, validation auc: 0.776
+epoch 23, train_loss: 5.79e-01, classifier_loss: 5.46e-01, intermediate_loss:6.11e-01 train_acc:0.72
+epoch 24, train_loss: 5.79e-01, classifier_loss: 5.46e-01, intermediate_loss:6.12e-01 train_acc:0.72
+epoch 24, validation loss:5.91e-01, validation classifier loss: 5.61e-01, validation intermediate loss: 6.20e-01, validation acc: 0.73, validation auc: 0.778
+epoch 25, train_loss: 5.78e-01, classifier_loss: 5.41e-01, intermediate_loss:6.14e-01 train_acc:0.73
+epoch 26, train_loss: 5.72e-01, classifier_loss: 5.35e-01, intermediate_loss:6.09e-01 train_acc:0.73
+epoch 26, validation loss:5.85e-01, validation classifier loss: 5.57e-01, validation intermediate loss: 6.13e-01, validation acc: 0.72, validation auc: 0.788
+epoch 27, train_loss: 5.71e-01, classifier_loss: 5.32e-01, intermediate_loss:6.10e-01 train_acc:0.73
+epoch 28, train_loss: 5.69e-01, classifier_loss: 5.29e-01, intermediate_loss:6.10e-01 train_acc:0.73
+epoch 28, validation loss:5.78e-01, validation classifier loss: 5.46e-01, validation intermediate loss: 6.09e-01, validation acc: 0.76, validation auc: 0.799
+epoch 29, train_loss: 5.70e-01, classifier_loss: 5.30e-01, intermediate_loss:6.10e-01 train_acc:0.73
+epoch 30, train_loss: 5.71e-01, classifier_loss: 5.28e-01, intermediate_loss:6.13e-01 train_acc:0.74
+epoch 30, validation loss:5.90e-01, validation classifier loss: 5.62e-01, validation intermediate loss: 6.18e-01, validation acc: 0.73, validation auc: 0.788
+epoch 31, train_loss: 5.65e-01, classifier_loss: 5.21e-01, intermediate_loss:6.10e-01 train_acc:0.74
+epoch 32, train_loss: 5.66e-01, classifier_loss: 5.23e-01, intermediate_loss:6.09e-01 train_acc:0.74
+epoch 32, validation loss:6.11e-01, validation classifier loss: 5.89e-01, validation intermediate loss: 6.34e-01, validation acc: 0.71, validation auc: 0.769
+epoch 33, train_loss: 5.62e-01, classifier_loss: 5.15e-01, intermediate_loss:6.09e-01 train_acc:0.75
+epoch 34, train_loss: 5.64e-01, classifier_loss: 5.18e-01, intermediate_loss:6.11e-01 train_acc:0.75
+epoch 34, validation loss:5.75e-01, validation classifier loss: 5.37e-01, validation intermediate loss: 6.12e-01, validation acc: 0.76, validation auc: 0.803
+epoch 35, train_loss: 5.63e-01, classifier_loss: 5.14e-01, intermediate_loss:6.11e-01 train_acc:0.74
+epoch 36, train_loss: 5.62e-01, classifier_loss: 5.14e-01, intermediate_loss:6.10e-01 train_acc:0.75
+epoch 36, validation loss:5.76e-01, validation classifier loss: 5.41e-01, validation intermediate loss: 6.11e-01, validation acc: 0.75, validation auc: 0.800
+epoch 37, train_loss: 5.57e-01, classifier_loss: 5.07e-01, intermediate_loss:6.07e-01 train_acc:0.75
+epoch 38, train_loss: 5.57e-01, classifier_loss: 5.05e-01, intermediate_loss:6.10e-01 train_acc:0.75
+epoch 38, validation loss:5.77e-01, validation classifier loss: 5.41e-01, validation intermediate loss: 6.14e-01, validation acc: 0.75, validation auc: 0.803
+epoch 39, train_loss: 5.59e-01, classifier_loss: 5.09e-01, intermediate_loss:6.10e-01 train_acc:0.75
+epoch 40, train_loss: 5.59e-01, classifier_loss: 5.07e-01, intermediate_loss:6.10e-01 train_acc:0.75
+epoch 40, validation loss:5.75e-01, validation classifier loss: 5.41e-01, validation intermediate loss: 6.10e-01, validation acc: 0.75, validation auc: 0.795
+early stopping on epoch 40, best epoch 34

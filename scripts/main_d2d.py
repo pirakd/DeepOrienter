@@ -106,9 +106,6 @@ if __name__ == '__main__':
                         help='number of dataloader workers', default=0)
     parser.add_argument('-d', dest='device', type=int, help='gpu number', default=None)
     args = parser.parse_args()
-    args.directed_interactions_filename = sorted(args.directed_interactions_filename)
-    args.prop_scores_filename = args.experiments_type + '_' + '_'.join(args.directed_interactions_filename) + '_{}'.format(args.n_experiments)
-
-    args.load_prop_scores = True
+    # args.load_prop_scores = True
     # args.save_prop_scores = True
     run(args)

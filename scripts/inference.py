@@ -64,7 +64,7 @@ def run(sys_args):
     test_loader = DataLoader(test_dataset, batch_size=args['train']['test_batch_size'], shuffle=False, pin_memory=False, )
     intermediate_loss_type = get_loss_function(args['train']['intermediate_loss_type'],
                                                focal_gamma=args['train']['focal_gamma'])
-    trainer = ClassifierTrainer(args['train']['n_epochs'], criteria=nn.CrossEntropyLoss(), intermediate_criteria=intermediate_loss_type,
+    trainer = ClassifierTrainer(args['train']['max_num_epochs'], criteria=nn.CrossEntropyLoss(), intermediate_criteria=intermediate_loss_type,
                                 intermediate_loss_weight=args['train']['intermediate_loss_weight'],
                                 optimizer=None, eval_metric=None, eval_interval=args['train']['eval_interval'], device='cpu')
 
@@ -79,14 +79,13 @@ def run(sys_args):
 
 
 if __name__ == '__main__':
-    model_name = '12_10_2022__15_58_06_294'
-    load_prop = True
-    save_prop = False
-    n_exp = 1
+    model_name = '12_10_2022__19_12_40_055'
+    input_type = 'AML'
+    n_exp = 5
     split = [0, 0, 1]
-    interaction_type = 'KPI'
+    interaction_type = ['KPI']
     device = 'cpu'
-    prop_scores_filename = 'AML_KPI_1'
+    prop_scores_filename = input_type + '_' + '_'.join(interaction_type) + '_{}'.format(n_exp)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-n,', '--n_exp', dest='n_experiments', type=int, help='num of experiments used (0 for all)', default=n_exp)
