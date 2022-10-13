@@ -8,7 +8,7 @@ To instaell required packages run:
 pip install path/to/project/requirements.txt
 ```
 
-### Whats inside
+### What's inside
  - **Example input files:** Can be found in [input](input) folder. contains:
     - Directed interactions: A subset of directed interactions used in the paper (KPI's)
     - Priors: A subset of cause effect pairs used in the paper (AML patiens)
@@ -17,7 +17,7 @@ pip install path/to/project/requirements.txt
     - Membrane receptors and transcription factors used to evaluate Vinayagam's method results.
 - **Deep learning model**: found in [deep_learning/models.py](deep_learning/models.py)
 - **Example of a parameter configuration**: in [presets.py](presets.py)
-- **Train script** example in [scripts/main.py](scripts/main.py) and **model load and inference** example script in [scripts/inference.py](scripts/inference.py)
+- **Train example script** in [scripts/main.py](scripts/main.py) and **model load and inference example script** in [scripts/inference.py](scripts/inference.py)
 - **Implementations of two previous methods** mentioned in the paper: [D2D.py](D2D.py) and [Vinayagam.py](Vinayagam.py)
 
 
