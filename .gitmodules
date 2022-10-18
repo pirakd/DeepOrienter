@@ -1,3 +1,0 @@
-[submodule "gene_name_translator"]
-	path = gene_name_translator
-	url = https://github.com/pirakd/gene_name_translator.git
