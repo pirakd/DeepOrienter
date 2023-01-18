@@ -1,6 +1,6 @@
 from os import path
 import sys
-sys.path.append(path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+sys.path.append(path.dirname(path.dirname(path.realpath(__file__))))
 from os import makedirs
 from deep_learning.models import DeepClassifier, EncoderBlock
 from deep_learning.data_loaders import LightDataset
@@ -145,8 +145,6 @@ if __name__ == '__main__':
     parser.add_argument('-w', dest='n_workers', type=int,
                         help='number of dataloader workers', default=0)
     args = parser.parse_args()
-    # args.prop_scores_filename = args.experiments_type + '_' + '_'.join(args.directed_interactions_filename) + '_{}'.format(args.n_experiments)
-    args.load_prop_scores = True
-    # args.save_prop_scores = True
+
     run(args)
 
