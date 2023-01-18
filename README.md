@@ -3,6 +3,11 @@
 This is the official repo of the paper "D'or: Deep orienter of protein-protein interaction networks"
 ### Getting started
 This project is 100% implemented in python. Authors used python 3.8 but it should run with similar versions as well.
+
+Please see that you clone the repository together with the gene translator submodule by running:
+```
+git clone --recursive https://github.com/pirakd/DeepOrienter.git
+```
 To instaell required packages run:
 ``` 
 pip install path/to/project/requirements.txt
@@ -14,6 +19,7 @@ pip install path/to/project/requirements.txt
     - Priors: A subset of cause effect pairs used in the paper (AML patiens)
     - PPI network: The Full human ANAT network
     - A trained model: Trained using 5 AML patients
+    - A file containing propagation scores for 5 AML patients
     - Membrane receptors and transcription factors used to evaluate Vinayagam's method results.
 - **Deep learning model**: found in [deep_learning/models.py](deep_learning/models.py)
 - **Example of a parameter configuration**: in [presets.py](presets.py)
