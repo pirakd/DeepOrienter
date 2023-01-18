@@ -7,7 +7,6 @@ This project is 100% implemented in python. Authors used python 3.8 but it shoul
 Please see that you clone the repository together with the gene translator submodule by running:
 ```
 git clone --recursive https://github.com/pirakd/DeepOrienter.git
-
 ```
 To instaell required packages run:
 ``` 
