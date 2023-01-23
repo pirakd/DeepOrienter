@@ -59,6 +59,8 @@ def eval_D2D(train_features, test_features, source_types=None):
     train_features = np.vstack([train_features, inverse_train_features])
     test_features = np.vstack([test_features, inverse_test_features])
 
+    # this was not mentioned in their paper but appeared in their git repository:
+    # https://github.com/danasilv/Diffuse2Direct/blob/master/code/Diffuse2Direct.ipynb (cell 9)
     quantized_train_features = np.argsort(np.argsort(train_features, axis=1), axis=1)
     quantized_test_features = np.argsort(np.argsort(test_features, axis=1), axis=1)
 
