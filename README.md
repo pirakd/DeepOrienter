@@ -1,6 +1,8 @@
 # DeepOrienter
 ### Deep orienter of protein-protein interaction networks
-This is the official repo of the paper "D'or: Deep orienter of protein-protein interaction networks"
+This is the repository of the paper "D'or: Deep orienter of protein-protein interaction networks"
+<img src="scheme.jpg" width="600"/>
+
 ### Getting started
 This project is 100% implemented in python. Authors used python 3.8 but it should run with similar versions as well.
 
