@@ -1,9 +1,9 @@
 from os import path
 import sys
-sys.path.append(path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+sys.path.append(path.dirname(path.dirname(path.realpath(__file__))))
 from os import path, makedirs
 from utils import read_data, get_root_path, train_test_split, get_time, \
-    gen_propagation_scores, redirect_output
+    gen_propagation_scores, redirect_output, str2bool
 from D2D import eval_D2D, generate_D2D_features_from_propagation_scores
 import numpy as np
 from presets import example_preset
@@ -92,10 +92,10 @@ if __name__ == '__main__':
                         help='name of experiment type(drug, colon, etc.)', default=input_type)
     parser.add_argument('-n,', '--n_exp', dest='n_experiments', type=int,
                         help='num of experiments used (0 for all)', default=n_exp)
-    parser.add_argument('-s', '--save_prop', dest='save_prop_scores', action='store_true', default=False,
-                        help='Whether to save propagation scores')
-    parser.add_argument('-l', '--load_prop', dest='load_prop_scores', action='store_true', default=False,
-                        help='Whether to load prop scores')
+    parser.add_argument('-s', '--save_prop', type=str2bool, dest='save_prop_scores', nargs='?', default=False,
+                        help="whether to save computed propagation scores")
+    parser.add_argument('-l', '--load_prop', type=str2bool, dest='load_prop_scores', nargs='?', default=True,
+                        help="whether to load pre-computed propagation scores")
     parser.add_argument('-sp', '--split', dest='train_val_test_split', nargs=3, help='[train, val, test] sums to 1',
                         default=split, type=float)
     parser.add_argument('-in', '--inter_file', dest='directed_interactions_filename', nargs='*', type=str,
@@ -106,6 +106,5 @@ if __name__ == '__main__':
                         help='number of dataloader workers', default=0)
     parser.add_argument('-d', dest='device', type=int, help='gpu number', default=None)
     args = parser.parse_args()
-    # args.load_prop_scores = True
-    # args.save_prop_scores = True
+
     run(args)

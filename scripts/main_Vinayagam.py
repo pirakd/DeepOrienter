@@ -1,8 +1,8 @@
 from os import path
 import sys
-sys.path.append(path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+sys.path.append(path.dirname(path.dirname(path.realpath(__file__))))
 from os import path, makedirs
-from utils import read_data, get_root_path, train_test_split, get_time, redirect_output
+from utils import read_data, get_root_path, train_test_split, get_time, redirect_output, str2bool
 from Vinayagam import generate_vinyagam_feature, count_sp_edges, infer_vinayagam
 import numpy as np
 from presets import example_preset
@@ -29,7 +29,6 @@ def run(sys_args):
 
     args['data']['load_prop_scores'] = sys_args.load_prop_scores
     args['data']['save_prop_scores'] = sys_args.save_prop_scores
-    args['data']['prop_scores_filename'] = sys_args.prop_scores_filename
     args['train']['train_val_test_split'] = sys_args.train_val_test_split
     args['data']['directed_interactions_filename'] = sys_args.directed_interactions_filename
     args['data']['sources_filename'] = sources_filenmae_dict[sys_args.experiments_type]
@@ -83,7 +82,7 @@ def run(sys_args):
     vinayagam_stats= ({type: {x: xx for x, xx in values.items() if x in ['acc', 'auc']} for type, values in
                             results_dict.items()})
 
-
+    print(vinayagam_stats)
     models = {'model':model}
 
     with open(path.join(output_file_path, 'args'), 'w') as f:
@@ -108,10 +107,10 @@ if __name__ == '__main__':
                         help='name of experiment type(drug, colon, etc.)', default=input_type)
     parser.add_argument('-n,', '--n_exp', dest='n_experiments', type=int,
                         help='num of experiments used (0 for all)', default=n_exp)
-    parser.add_argument('-s', '--save_prop', dest='save_prop_scores', action='store_true', default=False,
-                        help='Whether to save propagation scores')
-    parser.add_argument('-l', '--load_prop', dest='load_prop_scores', action='store_true', default=False,
-                        help='Whether to load prop scores')
+    parser.add_argument('-s', '--save_prop', type=str2bool, dest='save_prop_scores', nargs='?', default=False,
+                        help="whether to save computed propagation scores")
+    parser.add_argument('-l', '--load_prop', type=str2bool, dest='load_prop_scores', nargs='?', default=True,
+                        help="whether to load pre-computed propagation scores")
     parser.add_argument('-sp', '--split', dest='train_val_test_split', nargs=3, help='[train, val, test] sums to 1',
                         default=split, type=float)
     parser.add_argument('-in', '--inter_file', dest='directed_interactions_filename', nargs='*', type=str,

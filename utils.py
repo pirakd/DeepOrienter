@@ -13,6 +13,8 @@ from deep_learning.deep_utils import FocalLoss
 from tqdm import tqdm
 import sys
 import copy
+import argparse
+
 
 def balance_dataset(graph, directed_interactions, rng):
     sources = directed_interactions['source'].unique()
@@ -560,3 +562,13 @@ def propagate_partially_directed_network(undirected_network, prob_ratios, source
 
     col_id_to_idx = {xx:x for x,xx in gene_idx_to_id.items()}
     return propagation_scores, col_id_to_idx
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')

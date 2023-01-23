@@ -1,13 +1,15 @@
 from os import path
 import sys
-sys.path.append(path.dirname(path.dirname(path.dirname(path.realpath(__file__)))))
+sys.path.append(path.dirname(path.dirname(path.realpath(__file__))))
+print(path.dirname(path.dirname(path.realpath(__file__))))
 from os import makedirs
+from utils import read_data, load_model, log_results, get_time, get_root_path, train_test_split,\
+    gen_propagation_scores, get_loss_function, str2bool
 from deep_learning.data_loaders import LightDataset
 from deep_learning.trainer import ClassifierTrainer
 from torch import nn
 from torch.utils.data import DataLoader
-from utils import read_data, load_model, log_results, get_time, get_root_path, train_test_split,\
-    gen_propagation_scores, get_loss_function
+
 import torch
 import numpy as np
 import json
@@ -79,7 +81,7 @@ def run(sys_args):
 
 
 if __name__ == '__main__':
-    model_name = '12_10_2022__19_12_40_055'
+    model_name = '18_01_2023__17_57_15_354'
     input_type = 'AML'
     n_exp = 5
     split = [0, 0, 1]
@@ -90,8 +92,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-n,', '--n_exp', dest='n_experiments', type=int, help='num of experiments used (0 for all)', default=n_exp)
     parser.add_argument('-m,', '--model_name', type=str, help='name of saved model folder in input/models', default=model_name)
-    parser.add_argument('-s', '--save_prop', dest='save_prop_scores',  action='store_true', default=False, help='Whether to save propagation scores')
-    parser.add_argument('-l', '--load_prop', dest='load_prop_scores',  action='store_true', default=False, help='Whether to load prop scores')
+    parser.add_argument('-s', '--save_prop', type=str2bool, dest='save_prop_scores', nargs='?', default=False,
+                        help="whether to save computed propagation scores")
+    parser.add_argument('-l', '--load_prop', type=str2bool, dest='load_prop_scores', nargs='?', default=True,
+                        help="whether to load pre-computed propagation scores")
     parser.add_argument('-sp', '--split', dest='train_val_test_split',  nargs=3, help='[train, val, test] sums to 1', default=split, type=float)
     parser.add_argument('-d', '--device', type=str, help='cpu or gpu number',  default=device)
     parser.add_argument('-in', '--inter_file', dest='directed_interactions_filename', type=str, help='KPI/STKE',
@@ -99,6 +103,4 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--prop_file', dest='prop_scores_filename', type=str,
                         help='Name of prop score file(save/load)', default=prop_scores_filename)
     args = parser.parse_args()
-    args.load_prop_scores = True
-
     run(args)
