@@ -12,7 +12,7 @@ git clone --recursive https://github.com/pirakd/DeepOrienter.git
 ```
 To instaell required packages run:
 ``` 
-pip install path/to/project/requirements.txt
+pip install -r path/to/project/requirements.txt
 ```
 
 ### What's inside
