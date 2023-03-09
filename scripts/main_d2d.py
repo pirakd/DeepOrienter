@@ -48,8 +48,7 @@ def run(sys_args):
     propagation_scores, row_id_to_idx, col_id_to_idx, normalization_constants_dict = \
         gen_propagation_scores(args, network, sources, terminals, genes_ids_to_keep, directed_interactions_pairs_list)
 
-    train_indexes, val_indexes, test_indexes = train_test_split(args['data']['split_type'],
-                                                                len(directed_interactions_pairs_list),
+    train_indexes, val_indexes, test_indexes = train_test_split(len(directed_interactions_pairs_list),
                                                                 args['train']['train_val_test_split'],
                                                                 random_state=rng)  # feature generation
     train_indexes = np.concatenate([train_indexes, val_indexes])

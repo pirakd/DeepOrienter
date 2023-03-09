@@ -52,10 +52,12 @@ def run(sys_args):
     genes_ids_to_keep = sorted(list(set([x for pair in directed_interactions_pairs_list for x in pair])))
 
     propagation_scores, row_id_to_idx, col_id_to_idx, _ = \
-        gen_propagation_scores(args, network, sources, terminals, genes_ids_to_keep, directed_interactions_pairs_list, calc_normalization_constants=False)
+        gen_propagation_scores(args, network, sources, terminals, genes_ids_to_keep, directed_interactions_pairs_list,
+                               calc_normalization_constants=False)
 
-    train_indexes, val_indexes, test_indexes = train_test_split(args['data']['split_type'], len(directed_interactions_pairs_list), args['train']['train_val_test_split'],
-                                                                random_state=rng, directed_interactions=directed_interactions_pairs_list)
+    train_indexes, val_indexes, test_indexes = train_test_split(len(directed_interactions_pairs_list),
+                                                                args['train']['train_val_test_split'],
+                                                                random_state=rng)
     test_dataset = LightDataset(row_id_to_idx, col_id_to_idx, propagation_scores,
                                 directed_interactions_pairs_list[test_indexes], sources,
                                 terminals, args['data']['normalization_method'],
@@ -77,7 +79,10 @@ def run(sys_args):
 
     results_dict = {'test_stats': results, 'n_experiments': n_experiments, 'train_dataset':train_dataset,
                     'test_dataset':args['data']['directed_interactions_filename'], 'model_path': model_path}
-    log_results(output_file_path,  args, results_dict)
+    with open(path.join(output_file_path, 'args'), 'w') as f:
+        json.dump(args, f, indent=4, separators=(',', ': '))
+    with open(path.join(output_file_path, 'results'), 'w') as f:
+        json.dump(results_dict, f, indent=4, separators=(',', ': '))
 
 
 if __name__ == '__main__':

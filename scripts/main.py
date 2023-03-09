@@ -8,8 +8,10 @@ import json
 from deep_learning.trainer import ClassifierTrainer
 from torch import nn
 from torch.utils.data import DataLoader
-from utils import read_data, get_time, get_root_path, train_test_split, get_loss_function,\
-    gen_propagation_scores, redirect_output, get_optimizer, save_model, str2bool
+from utils import get_time, get_root_path, train_test_split, get_loss_function, redirect_output, get_optimizer,\
+    save_model, str2bool, log_project_version
+
+from preprocess import read_data, gen_propagation_scores
 import torch
 import numpy as np
 from presets import example_preset
@@ -22,6 +24,7 @@ def run(sys_args):
     output_file_path = path.join(root_path, output_folder, path.basename(__file__).split('.')[0], get_time())
     makedirs(output_file_path, exist_ok=True)
     redirect_output(path.join(output_file_path, 'log'))
+    log_project_version(output_file_path)
     n_experiments = sys_args.n_experiments
     args = example_preset
 
@@ -37,7 +40,7 @@ def run(sys_args):
     args['data']['directed_interactions_filename'] = sys_args.directed_interactions_filename
     args['data']['sources_filename'] = sources_filenmae_dict[sys_args.experiments_type]
     args['data']['terminals_filename'] = terminals_filenmae_dict[sys_args.experiments_type]
-    args['data']['n_experiments']  = n_experiments
+    args['data']['n_experiments'] = n_experiments
     rng = np.random.RandomState(args['data']['random_seed'])
     print(json.dumps(args, indent=4))
 
@@ -51,22 +54,24 @@ def run(sys_args):
     directed_interactions_pairs_list = np.array(directed_interactions.index)
     directed_interactions_source_type = np.array(directed_interactions.source)
     genes_ids_to_keep = sorted(list(set([x for pair in directed_interactions_pairs_list for x in pair])))
-
     propagation_scores, row_id_to_idx, col_id_to_idx, normalization_constants_dict = \
         gen_propagation_scores(args, network, sources, terminals, genes_ids_to_keep, directed_interactions_pairs_list)
 
     # generating datasets
-    train_indexes, val_indexes, test_indexes = train_test_split(args['data']['split_type'], len(directed_interactions_pairs_list), args['train']['train_val_test_split'],
-                                                                random_state=rng, directed_interactions=directed_interactions_pairs_list)
+    train_indexes, val_indexes, test_indexes = train_test_split(len(directed_interactions_pairs_list),
+                                                                args['train']['train_val_test_split'],
+                                                                random_state=rng)
+
     train_dataset = LightDataset(row_id_to_idx, col_id_to_idx, propagation_scores, directed_interactions_pairs_list[train_indexes],
                                  sources, terminals, args['data']['normalization_method'],
                                  normalization_constants_dict, degree_feature_normalization_constants=None,
-                                 pairs_source_type=directed_interactions_source_type, id_to_degree=id_to_degree)
+                                 pairs_source_type=directed_interactions_source_type, id_to_degree=id_to_degree,
+                                 bootstrap=args['train']['bootstrap_sampels'])
     train_loader = DataLoader(train_dataset, batch_size=args['train']['train_batch_size'], shuffle=True, pin_memory=False, num_workers=sys_args.n_workers)
 
     degree_normalization_constants = {'lmbda': train_dataset.degree_normalizer.lmbda,
-                                      'mean':train_dataset.degree_normalizer.lmbda,
-                                      'std':train_dataset.degree_normalizer.std}
+                                      'mean': train_dataset.degree_normalizer.lmbda,
+                                      'std': train_dataset.degree_normalizer.std}
     val_dataset = LightDataset(row_id_to_idx, col_id_to_idx,
                                propagation_scores, directed_interactions_pairs_list[val_indexes],
                                sources, terminals, args['data']['normalization_method'],
@@ -91,8 +96,7 @@ def run(sys_args):
         # init train
         optimizer = get_optimizer(args['train']['optimizer'])
         optimizer = optimizer(filter(lambda p: p.requires_grad, model.parameters()), lr=args['train']['learning_rate'])
-        intermediate_loss_type = get_loss_function(args['train']['intermediate_loss_type'],
-                                                   focal_gamma=args['train']['focal_gamma'])
+        intermediate_loss_type = get_loss_function(args['train']['intermediate_loss_type'])
         trainer = ClassifierTrainer(args['train']['max_num_epochs'], criteria=nn.CrossEntropyLoss(reduction='sum'), intermediate_criteria=intermediate_loss_type,
                                     intermediate_loss_weight=args['train']['intermediate_loss_weight'],
                                     optimizer=optimizer, eval_metric=None, eval_interval=args['train']['eval_interval'], device=device)
@@ -119,6 +123,7 @@ def run(sys_args):
     with open(path.join(output_file_path, 'results'), 'w') as f:
         json.dump(results_dict, f, indent=4, separators=(',', ': '))
     save_model(path.join(output_file_path, 'model'), best_model)
+
 
 if __name__ == '__main__':
     n_models = 1
@@ -147,6 +152,5 @@ if __name__ == '__main__':
     parser.add_argument('-w', dest='n_workers', type=int,
                         help='number of dataloader workers', default=0)
     args = parser.parse_args()
-
-    run(args)
-
+    args.load_prop_scores = True
+    run(args);

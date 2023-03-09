@@ -2,7 +2,8 @@ from os import path
 import sys
 sys.path.append(path.dirname(path.dirname(path.realpath(__file__))))
 from os import path, makedirs
-from utils import read_data, get_root_path, train_test_split, get_time, redirect_output, str2bool
+from utils import get_root_path, train_test_split, get_time, redirect_output, str2bool
+from preprocess import read_data
 from Vinayagam import generate_vinyagam_feature, count_sp_edges, infer_vinayagam
 import numpy as np
 from presets import example_preset
@@ -69,8 +70,7 @@ def run(sys_args):
 
     counts, grouped_counts = count_sp_edges(graph, receptor_groups, tf_groups)
 
-    train_indexes, val_indexes, test_indexes = train_test_split(args['data']['split_type'],
-                                                                len(directed_interactions_pairs_list),
+    train_indexes, val_indexes, test_indexes = train_test_split(len(directed_interactions_pairs_list),
                                                                 args['train']['train_val_test_split'],
                                                                 random_state=rng)  # feature generation
     train_indexes = np.concatenate([train_indexes, val_indexes])

@@ -8,7 +8,7 @@ class LightDataset(Dataset):
     def __init__(self, row_id_to_idx, col_id_to_idx, propagation_scores, directed_pairs_list,
                  sources, terminals, normalization_method, samples_normalization_constants,
                  degree_feature_normalization_constants=None,
-                 pairs_source_type=None, id_to_degree=None, train=True):
+                 pairs_source_type=None, id_to_degree=None, train=True, bootstrap=False):
         self.row_id_to_idx = row_id_to_idx
         self.col_id_to_idx = col_id_to_idx
         self.col_idx_to_id = {xx: x for x, xx in self.col_id_to_idx.items()}
@@ -26,7 +26,7 @@ class LightDataset(Dataset):
         self.idx_to_degree = {self.col_id_to_idx[id]: self.degree_normalizer(id_to_degree[id]) for id in self.col_id_to_idx.keys()}
         self.propagation_scores = self.normalizer(self.propagation_scores)
         self.train = train
-
+        self.bootstrap = bootstrap
     def __len__(self):
         return len(self.pairs_indexes) * 2
 
@@ -49,11 +49,23 @@ class LightDataset(Dataset):
         terminal_sample = np.zeros((len(self.source_indexes), self.longest_terminal, 2))
 
         for exp_idx in range(len(self.source_indexes)):
-            source_sample[exp_idx, :len(self.source_indexes[exp_idx]), :] =\
-                self.propagation_scores[:, pair][self.source_indexes[exp_idx], :]
-            terminal_sample[exp_idx, :len(self.terminal_indexes[exp_idx]), :] =\
-                self.propagation_scores[:, pair][self.terminal_indexes[exp_idx], :]
+            if not self.bootstrap:
+                source_sample[exp_idx, :len(self.source_indexes[exp_idx]), :] =\
+                    self.propagation_scores[:, pair][self.source_indexes[exp_idx], :]
+                terminal_sample[exp_idx, :len(self.terminal_indexes[exp_idx]), :] =\
+                    self.propagation_scores[:, pair][self.terminal_indexes[exp_idx], :]
+            else:
+                single_source_sample = self.propagation_scores[:, pair][self.source_indexes[exp_idx], :]
+                bootstrap_indices = np.random.randint(0, single_source_sample.shape[0],
+                                                      single_source_sample.shape[0])
+                source_sample[exp_idx, :len(self.source_indexes[exp_idx]), :] = \
+                    single_source_sample[bootstrap_indices, :]
 
+                single_terminal_sample = self.propagation_scores[:, pair][self.terminal_indexes[exp_idx], :]
+                bootstrap_indices = np.random.randint(0, single_terminal_sample.shape[0],
+                                                      single_terminal_sample.shape[0])
+                terminal_sample[exp_idx, :len(self.terminal_indexes[exp_idx]), :] = \
+                    single_terminal_sample[bootstrap_indices, :]
         return source_sample, terminal_sample, label, pair, pair_source_type, np.array([from_degree, to_degree])
 
     def get_experiment_indexes(self, experiment_id_sets):

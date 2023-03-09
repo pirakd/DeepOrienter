@@ -5,10 +5,24 @@ from copy import deepcopy
 
 
 class FeatureExtractor(nn.Module):
-    def __init__(self, feature_extractor, pulling_op):
+    """
+    Block for processing sets into fixed sized vector
+    """
+    def __init__(self, feature_extractor_size, pulling_op):
         super(FeatureExtractor, self).__init__()
-        self.phi = deepcopy(feature_extractor)
+        self.phi = self.init_feature_extractor(feature_extractor_size)
         self.pulling_op = get_pulling_func(pulling_op)
+
+
+    def init_feature_extractor(self, f_layers_size, dropout_rate=0):
+        f_layers_size = [2] + f_layers_size
+        feature_extractor_layers = []
+        for idx in range(len(f_layers_size))[:-1]:
+            feature_extractor_layers.append(nn.Linear(f_layers_size[idx], f_layers_size[idx + 1]))
+            feature_extractor_layers.append(nn.ReLU(inplace=True))
+            if dropout_rate:
+                feature_extractor_layers.append(torch.nn.Dropout(dropout_rate))
+        return nn.Sequential(*feature_extractor_layers[:-2 if dropout_rate else -1])
 
     def forward(self, x):
         mask = x[:, :, 0] != 0
@@ -18,7 +32,14 @@ class FeatureExtractor(nn.Module):
 
 
 class EncoderBlock(nn.Module):
+    """
+    receives N pairs of sets and outputs N features
+    """
     def __init__(self, model_args, n_experiments=1):
+        """
+        :param model_args: args['model']
+        :param n_experiments: number of experiments to use
+        """
         super(EncoderBlock, self).__init__()
 
         self.pair_degree_feature = model_args['pair_degree_feature']
@@ -31,28 +52,17 @@ class EncoderBlock(nn.Module):
         else:
             self.experiment_embedding = None
 
-        feature_extractor = self.init_feature_extractor(model_args['feature_extractor_layers'])
         rho = self.init_classifier(model_args['feature_extractor_layers'][-1],
                                           model_args['classifier_layers'],
                                           model_args['classifier_dropout']
                                           )
         if model_args['share_source_terminal_weights']:
-            self.source_model = FeatureExtractor(feature_extractor, model_args['pulling_func'])
+            self.source_model = FeatureExtractor(model_args['feature_extractor_layers'], model_args['pulling_func'])
             self.terminal_model = self.source_model
         else:
-            self.source_model = FeatureExtractor(feature_extractor, model_args['pulling_func'])
-            self.terminal_model = FeatureExtractor(feature_extractor, model_args['pulling_func'])
+            self.source_model = FeatureExtractor(model_args['feature_extractor_layers'], model_args['pulling_func'])
+            self.terminal_model = FeatureExtractor(model_args['feature_extractor_layers'], model_args['pulling_func'])
         self.rho = rho
-
-    def init_feature_extractor(self, f_layers_size, dropout_rate=0):
-        f_layers_size = [2] + f_layers_size
-        feature_extractor_layers = []
-        for idx in range(len(f_layers_size))[:-1]:
-            feature_extractor_layers.append(nn.Linear(f_layers_size[idx], f_layers_size[idx + 1]))
-            feature_extractor_layers.append(nn.ReLU(inplace=True))
-            if dropout_rate:
-                feature_extractor_layers.append(torch.nn.Dropout(dropout_rate))
-        return nn.Sequential(*feature_extractor_layers[:-2 if dropout_rate else -1])
 
     def init_classifier(self, last_feature_dim, c_layers_size, dropout_rate=None):
         classifier_layers = []
@@ -83,8 +93,15 @@ class EncoderBlock(nn.Module):
         logits = self.rho(combined)
         return logits
 
+
 class DeepClassifier(nn.Module):
+    """
+    A complete orientation model
+    """
     def __init__(self, encoder_block):
+        """
+        :param encoder_block: EncoderBlock object
+        """
         super(DeepClassifier, self).__init__()
         self.n_experiments = encoder_block.n_experiments
         self.base_model = encoder_block
