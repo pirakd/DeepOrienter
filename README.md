@@ -16,16 +16,11 @@ pip install -r path/to/project/requirements.txt
 ```
 
 ### What's inside
- - **Example input files:** Can be found in [input](input) folder. contains:
-    - Directed interactions: A subset of directed interactions used in the paper (KPI's)
-    - Priors: A subset of cause effect pairs used in the paper (AML patiens)
-    - PPI network: The Full human ANAT network
-    - A trained model: Trained using 5 AML patients
-    - A file containing propagation scores for 5 AML patients
-    - Membrane receptors and transcription factors used to evaluate Vinayagam's method results.
+- **Datasets used in the paper:** Can be found in [input](input) folder.  
 - **Deep learning model**: found in [deep_learning/models.py](deep_learning/models.py)
 - **Example of a parameter configuration**: in [presets.py](presets.py)
-- **Train example script** in [scripts/main.py](scripts/main.py) and **model load and inference example script** in [scripts/inference.py](scripts/inference.py)
+- **Train example script** in [scripts/main.py](scripts/main.py) and **model load and inference example script** in [scripts/inference.py](scripts/inference.py).
+For this purpose we also added a pre computed [propagation scores file](input/propagation_scores/) generated using 5 AML patients and a [deep model](input/models/18_01_2023__17_57_15_354) trained using these propgation scores and KPI interactions. 
 - **Implementations of two previous methods** mentioned in the paper: [D2D.py](D2D.py) and [Vinayagam.py](Vinayagam.py)
 
 
